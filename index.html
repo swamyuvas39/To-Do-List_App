@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>To-Do List</title>
+</head>
+
+<body>
+    <fieldset>
+    <div class="container">
+    <h1 id="todo-list">To-Do List <img src="images/icon.png" style="width: 35px;;"></h1>
+    <label for="todo-name">Todo Name:</label>
+    <input type="text" id="todo-name" placeholder="Add your Task">
+    <label for="todo-description">Todo Description:</label>
+    <input type="text" id="todo-description" placeholder="Task description">
+    <button id="add-item">Add Item</button>
+    <h2>Remaining Todos</h2>
+    <ul id="remaining-list"></ul>
+    <h2>Todos Done</h2>
+    <ul id="done-list"></ul>
+
+    <script src="todos.js"></script>
+    </div>
+    </fieldset>
+</body>
+</html>
