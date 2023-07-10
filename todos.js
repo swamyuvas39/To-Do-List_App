@@ -7,7 +7,7 @@ const doneList = document.getElementById('done-list');
 addItemBtn.addEventListener('click', addTodo);
 
 // CRUD CRUD API endpoint
-const apiBaseUrl = 'https://crudcrud.com/api/9017b161dcd748808eca596fc6a3a311';
+const apiBaseUrl = 'https://crudcrud.com/api/503f506ec2a44559b1fb47a55cf550eb';
 
 function addTodo() {
     const todoName = todoNameInput.value.trim();
@@ -24,7 +24,7 @@ function addTodo() {
     }
 }
 
-function createTodoItem(name, description) {
+function createTodoItem(name, description, id) {
     const todoItem = document.createElement('li');
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -34,12 +34,21 @@ function createTodoItem(name, description) {
     const desc = document.createElement('p');
     desc.textContent = description;
 
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', function () {
+        todoItem.remove();
+        // Remove the task from the API
+        deleteTodoFromAPI(id);
+    });
+
     todoItem.classList.add('todo-item');
     todoItem.appendChild(checkbox);
     todoItem.appendChild(label);
     todoItem.appendChild(desc);
+    todoItem.appendChild(deleteButton);
 
-    checkbox.addEventListener('change', function() {
+    checkbox.addEventListener('change', function () {
         if (checkbox.checked) {
             todoItem.classList.add('completed');
             remainingList.removeChild(todoItem);
@@ -74,16 +83,26 @@ function loadTodosFromAPI() {
     .then(response => response.json())
     .then(data => {
         data.forEach(todo => {
-        const todoItem = createTodoItem(todo.name, todo.description);
-        if (todo.completed) {
-            todoItem.classList.add('completed');
-            doneList.appendChild(todoItem);
-        } else {
-            remainingList.appendChild(todoItem);
-        }
+            const todoItem = createTodoItem(todo.name, todo.description, todo._id);
+            if (todo.completed) {
+                todoItem.classList.add('completed');
+                doneList.appendChild(todoItem);
+            } else {
+                remainingList.appendChild(todoItem);
+            }
         });
     })
     .catch(error => console.error('Error loading to-dos:', error));
+}
+
+function deleteTodoFromAPI(taskId) {
+    const endpoint = `${apiBaseUrl}/todos/${taskId}`;
+    fetch(endpoint, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => console.log('Deleted to-do:', data))
+    .catch(error => console.error('Error deleting to-do:', error));
 }
 
 // Load existing todos from the API when the page loads
